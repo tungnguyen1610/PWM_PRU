@@ -23,15 +23,11 @@ cd am335x_pru_package
 echo "Patching driver to prevent double interrupts"
 wget http://e2e.ti.com/cfs-file.ashx/__key/telligent-evolution-components-attachments/00-791-00-00-00-23-97-35/attachments.tar.gz
 tar -xzf attachments.tar.gz
-patch -p1 <  0001-Fix-for-duplicated-interrupts-when-interrupts-are-se.patch
-
-# Apply patch to remove needless printf statements
-patch -p1 < ../patches/Remove-needless-printfs.patch
 
 # Build driver as shared library
 echo "Building driver"
 cd pru_sw/app_loader/interface/
-gcc -I. -Wall -I../include   -c -fPIC -O3 -mtune=cortex-a8 -march=armv7-a -shared -o prussdrv.o prussdrv.c
+gcc -I. -Wall -I../include   -c -fPIC -O3 -mtune=cortex-a8 -march=armv7-a+fp -shared -o prussdrv.o prussdrv.c
 gcc -shared -o libprussdrv.so prussdrv.o
 
 # Install driver and headers
